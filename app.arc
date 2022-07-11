@@ -1,9 +1,8 @@
 @app
-begin-app
-
-@static
+deno-hello
 
 @http
+get /
 
 @tables
 data
